@@ -76,6 +76,7 @@ export default function Lobby() {
       flex: 1, display: 'flex', flexDirection: 'column',
       background: T.bg, color: T.ink,
       minHeight: '100vh',
+      maxWidth: 1280, margin: '0 auto', width: '100%',
     }}>
       {/* Header */}
       <div style={{

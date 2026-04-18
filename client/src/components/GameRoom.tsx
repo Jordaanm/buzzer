@@ -7,6 +7,7 @@ import PlayerIconRenderer from './PlayerIconRenderer';
 import { ROOM_ICONS, RoomIconRenderer } from '../roomIcons.tsx';
 import { T } from '../theme';
 import { ChunkyButton } from './ui';
+import { play, isSoundOn, setSoundOn } from '../sounds';
 
 interface Props {
   session: JoinSession;
@@ -19,8 +20,15 @@ export default function GameRoom({ session, onLeave }: Props) {
   const { roomId, playerName } = session;
   const [roomState, setRoomState] = useState<RoomState | null>(null);
   const [round, setRound] = useState(1);
-  const prevRoundState = useRef<string | null>(null);
+  const prevRoomState = useRef<string | null>(null);
   const navigate = useNavigate();
+  const [soundOn, setSoundOnState] = useState(isSoundOn);
+
+  const toggleSound = () => {
+    const next = !soundOn;
+    setSoundOn(next);
+    setSoundOnState(next);
+  };
 
   // Host editing state
   const [editingName, setEditingName] = useState(false);
@@ -41,13 +49,18 @@ export default function GameRoom({ session, onLeave }: Props) {
 
     socket.on('connect', handleConnect);
     socket.on('room-state', (state: RoomState) => {
-      if (prevRoundState.current === 'winner' && state.state === 'disarmed') {
-        setRound(r => r + 1);
+      const prev = prevRoomState.current;
+      if (prev === 'winner' && state.state === 'disarmed') setRound(r => r + 1);
+      if (prev !== state.state) {
+        if (state.state === 'armed')    play('arm');
+        if (state.state === 'winner')   play('winner');
+        if (state.state === 'disarmed' && prev !== null) play('disarm');
       }
-      prevRoundState.current = state.state;
+      prevRoomState.current = state.state;
       setRoomState(state);
     });
     socket.on('kicked', () => {
+      play('kick');
       sessionStorage.setItem('kicked', '1');
       socket.disconnect();
       navigate('/');
@@ -87,7 +100,7 @@ export default function GameRoom({ session, onLeave }: Props) {
     ? roomState.players.find(p => p.id === roomState.winnerId)
     : null;
 
-  const handleBuzz = () => socket.emit('buzz', { roomId });
+  const handleBuzz = () => { play('buzz'); socket.emit('buzz', { roomId }); };
   const handleReset = () => socket.emit('reset-round', { roomId });
   const handleArm = () => socket.emit('arm-buzzers', { roomId });
   const handleKick = (id: string) => socket.emit('kick-player', { roomId, targetPlayerId: id });
@@ -130,6 +143,8 @@ export default function GameRoom({ session, onLeave }: Props) {
         onOpenSettings={() => setShowSettings(true)}
         onCloseSettings={() => setShowSettings(false)}
         roomId={roomId}
+        soundOn={soundOn}
+        onToggleSound={toggleSound}
       />
     );
   }
@@ -143,6 +158,8 @@ export default function GameRoom({ session, onLeave }: Props) {
       iWon={iWon}
       onLeave={onLeave}
       onBuzz={handleBuzz}
+      soundOn={soundOn}
+      onToggleSound={toggleSound}
     />
   );
 }
@@ -168,12 +185,14 @@ interface HostViewProps {
   onOpenSettings: () => void;
   onCloseSettings: () => void;
   roomId: number;
+  soundOn: boolean;
+  onToggleSound: () => void;
 }
 
 function HostView({
   roomState, roundLabel, winnerPlayer, editingName, nameInput, nameInputRef,
   showSettings, onLeave, onStartEditName, onCommitName, onNameKey, onNameInput,
-  onArm, onReset, onKick, onOpenSettings, onCloseSettings, roomId,
+  onArm, onReset, onKick, onOpenSettings, onCloseSettings, roomId, soundOn, onToggleSound,
 }: HostViewProps) {
   const armed = roomState.state === 'armed';
   const hasWinner = !!winnerPlayer;
@@ -190,6 +209,7 @@ function HostView({
       background: T.bg, color: T.ink,
       minHeight: '100vh',
       fontFamily: '"Space Grotesk", system-ui',
+      maxWidth: 1280, margin: '0 auto', width: '100%',
     }}>
       {/* Top bar */}
       <div style={{
@@ -238,6 +258,9 @@ function HostView({
             >{roomState.name}</div>
           )}
         </div>
+        <button onClick={onToggleSound} style={iconBtnStyle} title={soundOn ? 'Mute' : 'Unmute'}>
+          <SoundIcon on={soundOn} />
+        </button>
         <button
           onClick={onOpenSettings}
           style={{
@@ -581,15 +604,18 @@ interface PlayerViewProps {
   iWon: boolean;
   onLeave: () => void;
   onBuzz: () => void;
+  soundOn: boolean;
+  onToggleSound: () => void;
 }
 
-function PlayerView({ roomState, roundLabel, me, winnerPlayer, iWon, onLeave, onBuzz }: PlayerViewProps) {
+function PlayerView({ roomState, roundLabel, me, winnerPlayer, iWon, onLeave, onBuzz, soundOn, onToggleSound }: PlayerViewProps) {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column',
       background: T.bg, color: T.ink,
       minHeight: '100vh',
       fontFamily: '"Space Grotesk", system-ui',
+      maxWidth: 1280, margin: '0 auto', width: '100%',
     }}>
       {/* Top bar */}
       <div style={{
@@ -612,6 +638,9 @@ function PlayerView({ roomState, roundLabel, me, winnerPlayer, iWon, onLeave, on
             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
           }}>{roomState.name}</div>
         </div>
+        <button onClick={onToggleSound} style={iconBtnStyle} title={soundOn ? 'Mute' : 'Unmute'}>
+          <SoundIcon on={soundOn} />
+        </button>
         {me && (
           <div style={{
             display: 'flex', alignItems: 'center', gap: 6,
@@ -724,6 +753,21 @@ function SlabBuzzer({ armed, won, lockedOut, onBuzz }: {
 }
 
 // ─── Shared Icons ─────────────────────────────────────────────────────────────
+
+function SoundIcon({ on }: { on: boolean }) {
+  return on ? (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+      <path d="M11 5L6 9H2v6h4l5 4V5z" fill={T.ink} />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7" stroke={T.ink} strokeWidth="2" strokeLinecap="round" />
+      <path d="M18.5 5.5a9 9 0 0 1 0 13" stroke={T.ink} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  ) : (
+    <svg width={20} height={20} viewBox="0 0 24 24" fill="none">
+      <path d="M11 5L6 9H2v6h4l5 4V5z" fill={T.inkDim} />
+      <path d="M17 9l-6 6M11 9l6 6" stroke={T.inkDim} strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 function BackIcon() {
   return (
