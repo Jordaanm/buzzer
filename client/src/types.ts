@@ -1,18 +1,27 @@
+export type RoundState = "disarmed" | "armed" | "winner";
+
 export interface Player {
   id: string;
   name: string;
+  icon: string;
+  color: string;
   isHost: boolean;
 }
 
 export interface RoomState {
-  id: string;
+  id: number;
+  name: string;
+  icon: string;
+  hasPassword: boolean;
+  state: RoundState;
+  winnerId: string | null;
   players: Player[];
-  buzzedBy: string | null;
-  locked: boolean;
 }
 
 export interface JoinSession {
-  roomId: string;
+  roomId: number;
   playerName: string;
-  isHost: boolean;
+  playerIcon: string;
+  playerColor: string;
+  password?: string;
 }

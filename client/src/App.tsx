@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import JoinRoom from './components/JoinRoom';
-import GameRoom from './components/GameRoom';
-import { JoinSession } from './types';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Lobby from './components/Lobby';
+import RoomPage from './components/RoomPage';
 
 export default function App() {
-  const [session, setSession] = useState<JoinSession | null>(null);
-
-  if (!session) {
-    return <JoinRoom onJoin={setSession} />;
-  }
-
-  return <GameRoom session={session} onLeave={() => setSession(null)} />;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Lobby />} />
+        <Route path="/room/:id" element={<RoomPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
