@@ -3,37 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buzzer App</title>
+    <title>Buzzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       body {
-        font-family: system-ui, -apple-system, sans-serif;
-        background: #0f0f1a;
-        color: #e8e8f0;
+        font-family: 'Space Grotesk', system-ui, sans-serif;
+        background: #1a130d;
+        color: #fdf4e3;
         min-height: 100vh;
       }
-      input {
-        font-size: 1rem;
-        padding: 0.6rem 0.8rem;
-        border-radius: 6px;
-        border: 1px solid #444;
-        background: #1a1a2e;
-        color: #e8e8f0;
-        width: 100%;
+      input, button, textarea { font-family: inherit; }
+
+      @keyframes bz-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
       }
-      input:focus { outline: 2px solid #5865f2; border-color: transparent; }
-      button {
-        font-size: 1rem;
-        padding: 0.6rem 1.2rem;
-        border-radius: 6px;
-        border: none;
-        background: #5865f2;
-        color: white;
-        cursor: pointer;
-        transition: background 0.15s;
+      @keyframes bz-pulse-ring {
+        0%, 100% { box-shadow: 0 0 40px #ff3e3e88, inset 0 -20px 40px rgba(0,0,0,0.4); }
+        50% { box-shadow: 0 0 90px #ff3e3e, inset 0 -20px 40px rgba(0,0,0,0.4); }
       }
-      button:hover:not(:disabled) { background: #4752c4; }
-      button:disabled { background: #444; color: #888; cursor: not-allowed; }
+      @keyframes bz-pop {
+        0% { transform: scale(0.6); opacity: 0; }
+        60% { transform: scale(1.08); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      @keyframes bz-bob {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+      }
+      @keyframes bz-flash {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+      @keyframes bz-slide-up {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      @keyframes bz-shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-8px); }
+        40%, 80% { transform: translateX(8px); }
+      }
+      @keyframes bz-live-dot {
+        0%, 100% { box-shadow: 0 0 4px #5cdb73; }
+        50% { box-shadow: 0 0 12px #5cdb73; }
+      }
     </style>
   </head>
   <body>

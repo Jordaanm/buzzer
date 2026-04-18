@@ -1,0 +1,15 @@
+export const T = {
+  bg: '#1a130d',
+  bg2: '#221810',
+  ink: '#fdf4e3',
+  inkDim: 'rgba(253,244,227,0.55)',
+  inkFaint: 'rgba(253,244,227,0.15)',
+  red: '#ff3e3e',
+  redDark: '#c01818',
+  yellow: '#ffd23f',
+  yellowDim: '#b8941f',
+  cyan: '#4fd1e0',
+  green: '#5cdb73',
+  border: '#0a0502',
+  shadow: '#0a0502',
+} as const;
