@@ -630,15 +630,12 @@ function PlayerView({ roomState, roundLabel, me, winnerPlayer, iWon, onLeave, on
         )}
       </div>
 
-      {/* Dome buzzer */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <DomeBuzzer
-          armed={roomState.state === 'armed'}
-          won={iWon}
-          lockedOut={!iWon && !!winnerPlayer}
-          onBuzz={onBuzz}
-        />
-      </div>
+      <SlabBuzzer
+        armed={roomState.state === 'armed'}
+        won={iWon}
+        lockedOut={!iWon && !!winnerPlayer}
+        onBuzz={onBuzz}
+      />
 
       {/* Winner bar (shown when someone else won) */}
       {winnerPlayer && !iWon && (
@@ -667,9 +664,9 @@ function PlayerView({ roomState, roundLabel, me, winnerPlayer, iWon, onLeave, on
   );
 }
 
-// ─── Dome Buzzer ──────────────────────────────────────────────────────────────
+// ─── Slab Buzzer ─────────────────────────────────────────────────────────────
 
-function DomeBuzzer({ armed, won, lockedOut, onBuzz }: {
+function SlabBuzzer({ armed, won, lockedOut, onBuzz }: {
   armed: boolean;
   won: boolean;
   lockedOut: boolean;
@@ -677,18 +674,18 @@ function DomeBuzzer({ armed, won, lockedOut, onBuzz }: {
 }) {
   const [pressed, setPressed] = useState(false);
   const disabled = !armed || lockedOut || won;
+  const offset = 10;
 
-  let color: string, label: string, sub: string;
-  if (won)         { color = T.yellow;  label = 'YOU BUZZED IN!'; sub = 'waiting for host'; }
-  else if (lockedOut) { color = '#4a2020'; label = 'LOCKED OUT';    sub = 'another player buzzed'; }
-  else if (armed)  { color = T.red;     label = 'BUZZ!';           sub = 'tap to answer'; }
-  else             { color = '#3a1010'; label = 'WAIT';             sub = 'buzzer disarmed'; }
+  let bg: string, label: string, sub: string;
+  if (won)            { bg = T.yellow;  label = 'BUZZED IN'; sub = 'you were first'; }
+  else if (lockedOut) { bg = '#3a1010'; label = 'LOCKED';    sub = 'too late'; }
+  else if (armed)     { bg = T.red;     label = 'BUZZ';      sub = 'tap to lock in'; }
+  else                { bg = '#2a1a12'; label = 'DISARMED';  sub = 'waiting on host'; }
 
   return (
     <div style={{
-      display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center',
-      padding: '20px 20px 40px', gap: 24, userSelect: 'none',
+      flex: 1, display: 'flex', flexDirection: 'column',
+      padding: 24, userSelect: 'none',
     }}>
       <button
         disabled={disabled}
@@ -696,57 +693,32 @@ function DomeBuzzer({ armed, won, lockedOut, onBuzz }: {
         onPointerUp={() => setPressed(false)}
         onPointerLeave={() => setPressed(false)}
         style={{
-          appearance: 'none', border: 'none', padding: 0,
-          width: 260, height: 260, borderRadius: '50%',
-          background: 'transparent',
+          appearance: 'none', flex: 1, width: '100%',
+          border: `4px solid ${T.border}`, background: bg,
           cursor: disabled ? 'not-allowed' : 'pointer',
-          position: 'relative',
-          transform: pressed ? 'translateY(8px)' : 'translateY(0)',
-          transition: 'transform 50ms',
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: 16,
+          borderRadius: 12,
+          boxShadow: pressed || disabled
+            ? `0 0 0 0 ${T.shadow}`
+            : `${offset}px ${offset}px 0 0 ${T.shadow}`,
+          transform: pressed ? `translate(${offset}px, ${offset}px)` : 'translate(0,0)',
+          transition: 'transform 60ms, box-shadow 60ms, background 150ms',
+          animation: armed && !won && !lockedOut ? 'bz-slab-pulse 1s ease-in-out infinite' : 'none',
         }}
       >
-        {/* Shadow base */}
         <div style={{
-          position: 'absolute', inset: 0, borderRadius: '50%',
-          background: '#0a0502', transform: 'translateY(10px)',
-        }} />
-        {/* Dome */}
+          fontFamily: '"Space Grotesk", system-ui', fontWeight: 900,
+          fontSize: 72, lineHeight: 1, letterSpacing: -1,
+          color: won ? T.border : T.ink,
+          textShadow: won ? 'none' : `3px 3px 0 ${T.border}`,
+        }}>{label}</div>
         <div style={{
-          position: 'absolute', inset: 0, borderRadius: '50%',
-          border: `4px solid ${T.border}`,
-          background: `radial-gradient(circle at 35% 30%, ${lighten(color, 28)}, ${color} 55%, ${darken(color, 22)})`,
-          boxShadow: armed && !won && !lockedOut
-            ? `0 0 60px ${color}99, inset 0 -20px 40px rgba(0,0,0,0.4)`
-            : `inset 0 -20px 40px rgba(0,0,0,0.4)`,
-          animation: armed && !won && !lockedOut
-            ? 'bz-pulse-ring 1.2s ease-in-out infinite'
-            : won ? 'bz-flash 0.5s ease-in-out 3' : 'none',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          {/* Highlight */}
-          <div style={{
-            position: 'absolute', top: 24, left: 48,
-            width: 80, height: 50, borderRadius: '50%',
-            background: 'radial-gradient(ellipse, rgba(255,255,255,0.45), transparent 70%)',
-            filter: 'blur(2px)',
-          }} />
-          <div style={{
-            fontFamily: '"Space Grotesk", system-ui', fontWeight: 900,
-            fontSize: armed && !lockedOut && !won ? 34 : 22,
-            letterSpacing: 1,
-            color: won ? T.border : T.ink,
-            textShadow: won ? 'none' : `0 2px 0 rgba(255,255,255,0.2)`,
-            position: 'relative', zIndex: 1,
-            textAlign: 'center', padding: '0 20px',
-            lineHeight: 1.1,
-          }}>{label}</div>
-        </div>
+          fontFamily: '"JetBrains Mono", monospace', fontSize: 13,
+          color: won ? T.border : T.ink, opacity: 0.8, letterSpacing: 2,
+          textTransform: 'uppercase',
+        }}>{sub}</div>
       </button>
-      <div style={{
-        fontFamily: '"JetBrains Mono", monospace', fontSize: 12,
-        color: T.inkDim, textAlign: 'center', letterSpacing: 2,
-        textTransform: 'uppercase',
-      }}>{sub}</div>
     </div>
   );
 }
@@ -767,35 +739,6 @@ function CrownIcon({ size = 16 }: { size?: number }) {
       <path d="M3 7l4 4 5-6 5 6 4-4-2 12H5L3 7z" fill={T.yellow} stroke="#0a0502" strokeWidth="1.5" strokeLinejoin="round" />
     </svg>
   );
-}
-
-// ─── Color helpers ────────────────────────────────────────────────────────────
-
-function lighten(hex: string, amt: number): string {
-  const c = parseHex(hex);
-  return rgbToHex(
-    Math.min(255, c.r + amt * 2.55),
-    Math.min(255, c.g + amt * 2.55),
-    Math.min(255, c.b + amt * 2.55),
-  );
-}
-
-function darken(hex: string, amt: number): string {
-  const c = parseHex(hex);
-  return rgbToHex(
-    Math.max(0, c.r - amt * 2.55),
-    Math.max(0, c.g - amt * 2.55),
-    Math.max(0, c.b - amt * 2.55),
-  );
-}
-
-function parseHex(hex: string) {
-  const h = hex.replace('#', '');
-  return { r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16) };
-}
-
-function rgbToHex(r: number, g: number, b: number): string {
-  return '#' + [r, g, b].map(x => Math.round(x).toString(16).padStart(2, '0')).join('');
 }
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
