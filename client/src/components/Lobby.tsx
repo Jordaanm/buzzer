@@ -11,7 +11,7 @@ interface RoomSummary {
   hasPassword: boolean;
 }
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
 const POLL_INTERVAL = 10_000;
 
 function UsersIcon() {

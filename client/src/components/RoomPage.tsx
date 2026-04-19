@@ -4,7 +4,7 @@ import JoinRoom from './JoinRoom';
 import GameRoom from './GameRoom';
 import { JoinSession } from '../types';
 
-const API_BASE = 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
 
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
