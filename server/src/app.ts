@@ -4,12 +4,16 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import { RoomManager } from './rooms';
 
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : '*';
+
 const app = express();
-app.use(cors());
+app.use(cors({ origin: ALLOWED_ORIGINS }));
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: { origin: '*' },
+  cors: { origin: ALLOWED_ORIGINS },
 });
 
 const rooms = new RoomManager();
