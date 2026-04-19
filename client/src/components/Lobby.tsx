@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { T } from '../theme';
-import { MarqueeRow } from './ui';
 
 interface RoomSummary {
   id: number;
@@ -42,10 +41,13 @@ function PlusIcon({ size = 20, color = 'currentColor' }: { size?: number; color?
   );
 }
 
+type FetchStatus = 'pending' | 'ok' | 'error';
+
 export default function Lobby() {
   const navigate = useNavigate();
   const [rooms, setRooms] = useState<RoomSummary[]>([]);
   const [kicked, setKicked] = useState(false);
+  const [status, setStatus] = useState<FetchStatus>('pending');
 
   useEffect(() => {
     const flag = sessionStorage.getItem('kicked');
@@ -60,8 +62,10 @@ export default function Lobby() {
     const fetch_ = () =>
       fetch(`${API_BASE}/api/lobby`)
         .then(r => r.json())
-        .then((data: RoomSummary[]) => { if (active) setRooms(data); })
-        .catch(() => {});
+        .then((data: RoomSummary[]) => {
+          if (active) { setRooms(data); setStatus('ok'); }
+        })
+        .catch(() => { if (active) setStatus('error'); });
 
     fetch_();
     const timer = setInterval(fetch_, POLL_INTERVAL);
@@ -85,13 +89,15 @@ export default function Lobby() {
         background: T.bg2,
         position: 'relative',
       }}>
-        <MarqueeRow count={20} />
-        <div style={{ marginTop: 16 }}>
+        <div>
           <div style={{
             fontFamily: '"JetBrains Mono", monospace',
-            fontSize: 11, letterSpacing: 3, color: T.yellow,
+            fontSize: 11, letterSpacing: 3,
+            color: status === 'ok' ? T.yellow : status === 'error' ? T.redDark : T.inkDim,
             textTransform: 'uppercase', marginBottom: 6,
-          }}>◆ LIVE NOW ◆</div>
+          }}>
+            {status === 'ok' ? '◆ LIVE NOW ◆' : status === 'error' ? '◆ SERVER UNREACHABLE ◆' : '◆ CONNECTING… ◆'}
+          </div>
           <h1 style={{
             margin: 0, fontSize: 36, fontWeight: 900, letterSpacing: -1,
             lineHeight: 1, color: T.ink,

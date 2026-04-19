@@ -431,14 +431,6 @@ function SettingsSheet({ roomState, roomId, onClose }: {
     onClose();
   };
 
-  const handleToggleLock = () => {
-    if (roomState.hasPassword) {
-      socket.emit('update-password', { roomId, password: null });
-    } else {
-      setShowIconPicker(false);
-    }
-  };
-
   return (
     <div
       style={{
@@ -522,20 +514,6 @@ function SettingsSheet({ roomState, roomId, onClose }: {
             )}
           </div>
 
-          {/* Lock room */}
-          <div>
-            <label style={{
-              display: 'flex', alignItems: 'center',
-              justifyContent: 'space-between', gap: 12, cursor: 'pointer',
-            }}>
-              <div>
-                <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 2 }}>Lock room</div>
-                <div style={{ fontSize: 13, color: T.inkDim }}>Require password to join</div>
-              </div>
-              <Toggle value={roomState.hasPassword} onChange={handleToggleLock} />
-            </label>
-          </div>
-
           {/* Password input */}
           <div>
             <div style={sheetLabelStyle}>Password</div>
@@ -569,30 +547,6 @@ function SettingsSheet({ roomState, roomId, onClose }: {
   );
 }
 
-function Toggle({ value, onChange }: { value: boolean; onChange: () => void }) {
-  return (
-    <button
-      onClick={e => { e.preventDefault(); onChange(); }}
-      style={{
-        appearance: 'none',
-        border: `2px solid ${T.border}`,
-        background: value ? T.green : '#444',
-        width: 56, height: 32, borderRadius: 18,
-        position: 'relative', cursor: 'pointer', padding: 0,
-        transition: 'background 150ms',
-        flexShrink: 0,
-      }}
-    >
-      <div style={{
-        position: 'absolute', top: 2, left: value ? 26 : 2,
-        width: 24, height: 24, borderRadius: '50%',
-        background: T.ink, border: `2px solid ${T.border}`,
-        boxSizing: 'border-box',
-        transition: 'left 150ms',
-      }} />
-    </button>
-  );
-}
 
 // ─── Player View ──────────────────────────────────────────────────────────────
 
