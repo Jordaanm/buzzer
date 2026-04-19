@@ -21,6 +21,8 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - name: Debug secret
+        run: echo ${{ secrets.VITE_SERVER_URL }} | base64
 
       - name: Build client
         run: npm run build --workspace=client
