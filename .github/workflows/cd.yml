@@ -67,6 +67,7 @@ jobs:
       - name: Zip deployment artifact
         run: |
           cp server/package.json server/dist/
+          echo "web: node index.js" > server/dist/Procfile
           cd server/dist
           zip -r ../../deploy.zip .
 
