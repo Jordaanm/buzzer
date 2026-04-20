@@ -96,17 +96,17 @@ export default function Lobby() {
             color: status === 'ok' ? T.yellow : status === 'error' ? T.redDark : T.inkDim,
             textTransform: 'uppercase', marginBottom: 6,
           }}>
-            {status === 'ok' ? '◆ LIVE NOW ◆' : status === 'error' ? '◆ SERVER UNREACHABLE ◆' : '◆ CONNECTING… ◆'}
+            {status === 'ok' ? '◆ PLAY NOW ◆' : status === 'error' ? '◆ SERVER UNREACHABLE ◆' : '◆ CONNECTING… ◆'}
           </div>
           <h1 style={{
             margin: 0, fontSize: 36, fontWeight: 900, letterSpacing: -1,
             lineHeight: 1, color: T.ink,
-          }}>Pick a room</h1>
+          }}>Buzzr</h1>
           <div style={{
             marginTop: 6, fontSize: 14, color: T.inkDim,
             fontFamily: '"JetBrains Mono", monospace',
           }}>
-            {occupied.length} active · tap an empty slot to host
+            {occupied.length} active {occupied.length === 1 ? 'room' : 'rooms'} · tap an open slot to host
           </div>
         </div>
       </div>
