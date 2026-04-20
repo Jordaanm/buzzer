@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <!-- Wings -->
+  <rect x="0" y="8" width="8" height="8" fill="#fdf4e3" opacity="0.9"/>
+  <rect x="24" y="8" width="8" height="8" fill="#fdf4e3" opacity="0.9"/>
+
+  <!-- Yellow: head top -->
+  <rect x="14" y="6" width="4" height="2" fill="#ffd23f"/>
+  <!-- Yellow: head row 4 -->
+  <rect x="10" y="8" width="12" height="2" fill="#ffd23f"/>
+  <!-- Yellow: eyes row (between eyes) -->
+  <rect x="10" y="10" width="2" height="2" fill="#ffd23f"/>
+  <rect x="14" y="10" width="4" height="2" fill="#ffd23f"/>
+  <rect x="20" y="10" width="2" height="2" fill="#ffd23f"/>
+  <!-- Yellow: head row 6 -->
+  <rect x="10" y="12" width="12" height="2" fill="#ffd23f"/>
+  <!-- Yellow: cheeks (mouth row) -->
+  <rect x="10" y="14" width="4" height="2" fill="#ffd23f"/>
+  <rect x="18" y="14" width="4" height="2" fill="#ffd23f"/>
+  <!-- Yellow: body stripe 1 -->
+  <rect x="10" y="16" width="12" height="2" fill="#ffd23f"/>
+  <!-- Yellow: body stripe 2 -->
+  <rect x="10" y="20" width="12" height="2" fill="#ffd23f"/>
+  <!-- Yellow: body stripe 3 -->
+  <rect x="10" y="24" width="12" height="2" fill="#ffd23f"/>
+  <!-- Yellow: stinger top -->
+  <rect x="14" y="26" width="4" height="2" fill="#ffd23f"/>
+
+  <!-- Dark: antenna tips -->
+  <rect x="8" y="0" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="0" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: antenna mid -->
+  <rect x="10" y="2" width="2" height="2" fill="#0a0502"/>
+  <rect x="20" y="2" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: antenna base -->
+  <rect x="12" y="4" width="2" height="2" fill="#0a0502"/>
+  <rect x="18" y="4" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: head top outline -->
+  <rect x="10" y="6" width="4" height="2" fill="#0a0502"/>
+  <rect x="18" y="6" width="4" height="2" fill="#0a0502"/>
+  <!-- Dark: head sides row 4 -->
+  <rect x="8" y="8" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="8" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: head sides + eyes row 5 -->
+  <rect x="8" y="10" width="2" height="2" fill="#0a0502"/>
+  <rect x="12" y="10" width="2" height="2" fill="#0a0502"/>
+  <rect x="18" y="10" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="10" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: head sides row 6 -->
+  <rect x="8" y="12" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="12" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: head sides + mouth row 7 -->
+  <rect x="8" y="14" width="2" height="2" fill="#0a0502"/>
+  <rect x="14" y="14" width="4" height="2" fill="#0a0502"/>
+  <rect x="22" y="14" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: body sides row 8 -->
+  <rect x="8" y="16" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="16" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: body stripe row 9 -->
+  <rect x="8" y="18" width="16" height="2" fill="#0a0502"/>
+  <!-- Dark: body sides row 10 -->
+  <rect x="8" y="20" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="20" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: body stripe row 11 -->
+  <rect x="8" y="22" width="16" height="2" fill="#0a0502"/>
+  <!-- Dark: body sides row 12 -->
+  <rect x="8" y="24" width="2" height="2" fill="#0a0502"/>
+  <rect x="22" y="24" width="2" height="2" fill="#0a0502"/>
+  <!-- Dark: stinger row 13 -->
+  <rect x="10" y="26" width="4" height="2" fill="#0a0502"/>
+  <rect x="18" y="26" width="4" height="2" fill="#0a0502"/>
+  <!-- Dark: stinger tip row 14 -->
+  <rect x="12" y="28" width="8" height="2" fill="#0a0502"/>
+</svg>
