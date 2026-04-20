@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
 import { isSoundOn, play, setSoundOn } from '../sounds';
-import { T } from '../theme';
 import { JoinSession, RoomState } from '../types';
 import { RoomHostView } from './RoomHostView.tsx';
 import { RoomPlayerView } from './RoomPlayerView.tsx';
+import { connectingScreenStyle } from './styles';
 
 interface Props {
   session: JoinSession;
@@ -77,16 +77,7 @@ export default function GameRoom({ session, onLeave }: Props) {
   }, [roomId, playerName, session, navigate]);
 
   if (!roomState) {
-    return (
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        minHeight: '100vh', background: T.bg,
-        color: T.inkDim, fontFamily: '"JetBrains Mono", monospace',
-        fontSize: 13, letterSpacing: 2,
-      }}>
-        CONNECTING…
-      </div>
-    );
+    return <div style={connectingScreenStyle}>CONNECTING…</div>;
   }
 
   const me = roomState.players.find(p => p.id === socket.id);

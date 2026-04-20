@@ -46,13 +46,11 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
   if (step === 'password') {
     return (
       <div style={pageStyle}>
-        <div style={{ width: '100%', maxWidth: 360 }}>
+        <div style={formContainerStyle}>
           <div style={labelStyle}>ROOM LOCKED</div>
           <h1 style={titleStyle}>Room {roomId}</h1>
-          <p style={{ color: T.inkDim, marginBottom: 24, fontSize: 14 }}>
-            This room requires a password.
-          </p>
-          <form onSubmit={handlePasswordSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <p style={passwordHintStyle}>This room requires a password.</p>
+          <form onSubmit={handlePasswordSubmit} style={passwordFormStyle}>
             <input
               type="text"
               inputMode="numeric"
@@ -69,11 +67,7 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
                 fontSize: 22, fontWeight: 700, letterSpacing: 6,
               }}
             />
-            {passwordError && (
-              <div style={{ color: T.red, fontSize: 13, fontFamily: '"JetBrains Mono", monospace', textAlign: 'center' }}>
-                Password is required
-              </div>
-            )}
+            {passwordError && <div style={passwordErrorStyle}>Password is required</div>}
             <ChunkyButton color={T.yellow}>Continue →</ChunkyButton>
           </form>
         </div>
@@ -83,17 +77,9 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
 
   return (
     <div style={pageStyle}>
-      <div style={{ width: '100%', maxWidth: 360 }}>
+      <div style={formContainerStyle}>
         {hasPassword && (
-          <button
-            onClick={() => setStep('password')}
-            style={{
-              appearance: 'none', border: 'none', background: 'transparent',
-              color: T.inkDim, cursor: 'pointer', padding: '0 0 16px',
-              display: 'flex', alignItems: 'center', gap: 6,
-              fontFamily: '"JetBrains Mono", monospace', fontSize: 12, letterSpacing: 1,
-            }}
-          >
+          <button onClick={() => setStep('password')} style={backBtnStyle}>
             <ArrowLeft /> BACK
           </button>
         )}
@@ -101,7 +87,7 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
         <div style={labelStyle}>ROOM {String(roomId).padStart(2, '0')}</div>
         <h1 style={{ ...titleStyle, marginBottom: 28 }}>Who are you?</h1>
 
-        <form onSubmit={handleIdentitySubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <form onSubmit={handleIdentitySubmit} style={identityFormStyle}>
           {/* Nickname */}
           <div>
             <div style={fieldLabelStyle}>Nickname</div>
@@ -118,23 +104,16 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
           {/* Icon picker */}
           <div>
             <div style={fieldLabelStyle}>Icon</div>
-            <div style={{
-              display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: 4,
-            }}>
+            <div style={iconGridStyle}>
               {PLAYER_ICONS.map(i => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setIcon(i)}
                   style={{
-                    appearance: 'none',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    padding: '7px', borderRadius: 4,
+                    ...iconPickerItemStyle,
                     border: `2px solid ${icon === i ? T.yellow : T.border}`,
                     background: icon === i ? 'rgba(255,210,63,0.12)' : T.bg2,
-                    cursor: 'pointer',
-                    transition: 'border-color 80ms, background 80ms',
-                    aspectRatio: '1',
                   }}
                 >
                   <PlayerIconRenderer icon={i} color={color} size={18} />
@@ -146,19 +125,17 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
           {/* Color picker */}
           <div>
             <div style={fieldLabelStyle}>Color</div>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <div style={colorGridStyle}>
               {PLAYER_COLORS.map(c => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setColor(c)}
                   style={{
-                    width: 32, height: 32, borderRadius: '50%',
+                    ...colorSwatchStyle,
                     background: c,
                     border: color === c ? `3px solid ${T.ink}` : `3px solid ${T.bg2}`,
                     boxShadow: color === c ? `0 0 0 2px ${T.yellow}` : 'none',
-                    cursor: 'pointer',
-                    transition: 'box-shadow 80ms',
                   }}
                 />
               ))}
@@ -166,18 +143,9 @@ export default function JoinRoom({ roomId, hasPassword, onJoin }: Props) {
           </div>
 
           {/* Preview */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 12,
-            padding: '14px 16px',
-            background: T.bg2,
-            border: `3px solid ${T.border}`,
-            borderRadius: 6,
-            boxShadow: `4px 4px 0 0 ${T.shadow}`,
-          }}>
+          <div style={previewCardStyle}>
             <PlayerIconRenderer icon={icon} color={color} size={36} />
-            <span style={{ fontWeight: 700, fontSize: 18, letterSpacing: -0.3 }}>
-              {nickname || 'Your name'}
-            </span>
+            <span style={previewNameStyle}>{nickname || 'Your name'}</span>
           </div>
 
           <ChunkyButton color={T.yellow} big disabled={!nickname.trim()}>
@@ -228,4 +196,57 @@ const inputStyle: React.CSSProperties = {
   fontWeight: 700,
   outline: 'none',
   boxShadow: `4px 4px 0 0 ${T.shadow}`,
+};
+
+const formContainerStyle: React.CSSProperties = { width: '100%', maxWidth: 360 };
+
+const passwordHintStyle: React.CSSProperties = { color: T.inkDim, marginBottom: 24, fontSize: 14 };
+
+const passwordFormStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 16 };
+
+const passwordErrorStyle: React.CSSProperties = {
+  color: T.red, fontSize: 13,
+  fontFamily: '"JetBrains Mono", monospace', textAlign: 'center',
+};
+
+const backBtnStyle: React.CSSProperties = {
+  appearance: 'none', border: 'none', background: 'transparent',
+  color: T.inkDim, cursor: 'pointer', padding: '0 0 16px',
+  display: 'flex', alignItems: 'center', gap: 6,
+  fontFamily: '"JetBrains Mono", monospace', fontSize: 12, letterSpacing: 1,
+};
+
+const identityFormStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: 20 };
+
+const iconGridStyle: React.CSSProperties = {
+  display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: 4,
+};
+
+const iconPickerItemStyle: React.CSSProperties = {
+  appearance: 'none',
+  display: 'flex', alignItems: 'center', justifyContent: 'center',
+  padding: '7px', borderRadius: 4,
+  cursor: 'pointer',
+  transition: 'border-color 80ms, background 80ms',
+  aspectRatio: '1',
+};
+
+const colorGridStyle: React.CSSProperties = { display: 'flex', gap: 8, flexWrap: 'wrap' };
+
+const colorSwatchStyle: React.CSSProperties = {
+  width: 32, height: 32, borderRadius: '50%',
+  cursor: 'pointer', transition: 'box-shadow 80ms',
+};
+
+const previewCardStyle: React.CSSProperties = {
+  display: 'flex', alignItems: 'center', gap: 12,
+  padding: '14px 16px',
+  background: T.bg2,
+  border: `3px solid ${T.border}`,
+  borderRadius: 6,
+  boxShadow: `4px 4px 0 0 ${T.shadow}`,
+};
+
+const previewNameStyle: React.CSSProperties = {
+  fontWeight: 700, fontSize: 18, letterSpacing: -0.3,
 };

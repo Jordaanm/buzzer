@@ -1,20 +1,6 @@
 import { useState } from 'react';
 import { T } from '../theme';
 
-export function MarqueeRow({ count = 18 }: { count?: number }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} style={{
-          width: 8, height: 8, borderRadius: '50%',
-          background: i % 2 === 0 ? T.yellow : T.yellowDim,
-          boxShadow: i % 2 === 0 ? `0 0 6px ${T.yellow}` : 'none',
-        }} />
-      ))}
-    </div>
-  );
-}
-
 interface ChunkyButtonProps {
   children: React.ReactNode;
   onClick?: () => void;

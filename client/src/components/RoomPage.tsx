@@ -3,6 +3,7 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import JoinRoom from './JoinRoom';
 import GameRoom from './GameRoom';
 import { JoinSession } from '../types';
+import { connectingScreenStyle } from './styles';
 
 const API_BASE = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
 
@@ -32,7 +33,7 @@ export default function RoomPage() {
   }
 
   if (loading) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#1a130d', color: 'rgba(253,244,227,0.4)', fontFamily: '"JetBrains Mono", monospace', fontSize: 13, letterSpacing: 2 }}>LOADING…</div>;
+    return <div style={connectingScreenStyle}>LOADING…</div>;
   }
 
   if (!session) {

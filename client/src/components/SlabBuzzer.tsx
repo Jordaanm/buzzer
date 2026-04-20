@@ -1,6 +1,30 @@
 import { useState } from "react";
 import { T } from "../theme";
 
+const slabWrapperStyle: React.CSSProperties = {
+  flex: 1, display: 'flex', flexDirection: 'column',
+  padding: 24, userSelect: 'none',
+};
+
+const slabBtnBaseStyle: React.CSSProperties = {
+  appearance: 'none', flex: 1, width: '100%',
+  border: `4px solid ${T.border}`,
+  display: 'flex', flexDirection: 'column',
+  alignItems: 'center', justifyContent: 'center', gap: 16,
+  borderRadius: 12,
+  transition: 'transform 60ms, box-shadow 60ms, background 150ms',
+};
+
+const slabLabelStyle: React.CSSProperties = {
+  fontFamily: '"Space Grotesk", system-ui', fontWeight: 900,
+  fontSize: 72, lineHeight: 1, letterSpacing: -1,
+};
+
+const slabSubStyle: React.CSSProperties = {
+  fontFamily: '"JetBrains Mono", monospace', fontSize: 13,
+  opacity: 0.8, letterSpacing: 2, textTransform: 'uppercase',
+};
+
 export const SlabBuzzer = ({ armed, won, lockedOut, onBuzz }: {
   armed: boolean;
   won: boolean;
@@ -18,41 +42,23 @@ export const SlabBuzzer = ({ armed, won, lockedOut, onBuzz }: {
   else                { bg = '#2a1a12'; label = 'DISARMED';  sub = 'waiting on host'; }
 
   return (
-    <div style={{
-      flex: 1, display: 'flex', flexDirection: 'column',
-      padding: 24, userSelect: 'none',
-    }}>
+    <div style={slabWrapperStyle}>
       <button
         disabled={disabled}
         onPointerDown={() => { if (!disabled) { setPressed(true); onBuzz(); } }}
         onPointerUp={() => setPressed(false)}
         onPointerLeave={() => setPressed(false)}
         style={{
-          appearance: 'none', flex: 1, width: '100%',
-          border: `4px solid ${T.border}`, background: bg,
+          ...slabBtnBaseStyle,
+          background: bg,
           cursor: disabled ? 'not-allowed' : 'pointer',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center', gap: 16,
-          borderRadius: 12,
-          boxShadow: pressed || disabled
-            ? `0 0 0 0 ${T.shadow}`
-            : `${offset}px ${offset}px 0 0 ${T.shadow}`,
+          boxShadow: pressed || disabled ? `0 0 0 0 ${T.shadow}` : `${offset}px ${offset}px 0 0 ${T.shadow}`,
           transform: pressed ? `translate(${offset}px, ${offset}px)` : 'translate(0,0)',
-          transition: 'transform 60ms, box-shadow 60ms, background 150ms',
           animation: armed && !won && !lockedOut ? 'bz-slab-pulse 1s ease-in-out infinite' : 'none',
         }}
       >
-        <div style={{
-          fontFamily: '"Space Grotesk", system-ui', fontWeight: 900,
-          fontSize: 72, lineHeight: 1, letterSpacing: -1,
-          color: won ? T.border : T.ink,
-          textShadow: won ? 'none' : `3px 3px 0 ${T.border}`,
-        }}>{label}</div>
-        <div style={{
-          fontFamily: '"JetBrains Mono", monospace', fontSize: 13,
-          color: won ? T.border : T.ink, opacity: 0.8, letterSpacing: 2,
-          textTransform: 'uppercase',
-        }}>{sub}</div>
+        <div style={{ ...slabLabelStyle, color: won ? T.border : T.ink, textShadow: won ? 'none' : `3px 3px 0 ${T.border}` }}>{label}</div>
+        <div style={{ ...slabSubStyle, color: won ? T.border : T.ink }}>{sub}</div>
       </button>
     </div>
   );
