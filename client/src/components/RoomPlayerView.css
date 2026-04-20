@@ -1,0 +1,67 @@
+.room-player-view__top-bar-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.room-player-view__player-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--bz-cyan);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.room-player-view__room-name {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.room-player-view__player-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 2px solid var(--bz-border);
+  background: var(--bz-bg);
+  border-radius: 999px;
+  min-width: 0;
+  max-width: 130px;
+  flex-shrink: 0;
+  box-shadow: 2px 2px 0 0 var(--bz-shadow);
+}
+
+.room-player-view__player-badge-name {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--bz-ink);
+}
+
+.room-player-view__winner-bar {
+  padding: 14px 20px 28px;
+  border-top: 3px solid var(--bz-border);
+  background: var(--bz-bg2);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.room-player-view__winner-bar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--bz-ink-dim);
+  text-transform: uppercase;
+}
+
+.room-player-view__winner-bar-name {
+  font-size: 20px;
+  font-weight: 800;
+}

@@ -1,0 +1,128 @@
+.settings-sheet__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.settings-sheet__container {
+  background: var(--bz-bg2);
+  border-top: 4px solid var(--bz-border);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: bz-slide-up 0.25s ease-out;
+}
+
+.settings-sheet__header {
+  padding: 14px 20px;
+  border-bottom: 2px solid var(--bz-border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-sheet__title {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.settings-sheet__close-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--bz-ink-dim);
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+}
+
+.settings-sheet__body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-sheet__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--bz-ink-dim);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.settings-sheet__icon-picker-trigger {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 3px solid var(--bz-border);
+  background: var(--bz-bg);
+  border-radius: 6px;
+  padding: 12px 16px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 4px 4px 0 0 var(--bz-shadow);
+}
+
+.settings-sheet__icon-picker-trigger-text {
+  color: var(--bz-ink-dim);
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.settings-sheet__icon-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.settings-sheet__icon-picker-item {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 80ms;
+  border: 2px solid var(--bz-border);
+  background: var(--bz-bg);
+}
+
+.settings-sheet__icon-picker-item--selected {
+  border-color: var(--bz-yellow);
+  background: rgba(255, 210, 63, 0.1);
+}
+
+.settings-sheet__password-row {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-sheet__password-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 3px solid var(--bz-border);
+  background: var(--bz-bg);
+  color: var(--bz-ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  border-radius: 4px;
+  outline: none;
+  box-shadow: 3px 3px 0 0 var(--bz-shadow);
+}

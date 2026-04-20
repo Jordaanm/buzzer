@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { T } from '../theme';
+import './Lobby.css';
 
 interface RoomSummary {
   id: number;
@@ -75,70 +76,28 @@ export default function Lobby() {
   const occupied = rooms.filter(r => r.playerCount > 0);
   const empty = rooms.filter(r => r.playerCount === 0);
 
+  const statusText = status === 'ok' ? '◆ PLAY NOW ◆' : status === 'error' ? '◆ SERVER UNREACHABLE ◆' : '◆ CONNECTING… ◆';
+
   return (
-    <div style={{
-      flex: 1, display: 'flex', flexDirection: 'column',
-      background: T.bg, color: T.ink,
-      minHeight: '100vh',
-      maxWidth: 1280, margin: '0 auto', width: '100%',
-    }}>
-      {/* Header */}
-      <div style={{
-        padding: '48px 20px 24px',
-        borderBottom: `3px solid ${T.border}`,
-        background: T.bg2,
-        position: 'relative',
-      }}>
-        <div>
-          <div style={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: 11, letterSpacing: 3,
-            color: status === 'ok' ? T.yellow : status === 'error' ? T.redDark : T.inkDim,
-            textTransform: 'uppercase', marginBottom: 6,
-          }}>
-            {status === 'ok' ? '◆ LIVE NOW ◆' : status === 'error' ? '◆ SERVER UNREACHABLE ◆' : '◆ CONNECTING… ◆'}
-          </div>
-          <h1 style={{
-            margin: 0, fontSize: 36, fontWeight: 900, letterSpacing: -1,
-            lineHeight: 1, color: T.ink,
-          }}>Pick a room</h1>
-          <div style={{
-            marginTop: 6, fontSize: 14, color: T.inkDim,
-            fontFamily: '"JetBrains Mono", monospace',
-          }}>
-            {occupied.length} active · tap an empty slot to host
-          </div>
+    <div className="lobby">
+      <div className="lobby__header">
+        <div className={`lobby__status-label lobby__status-label--${status}`}>{statusText}</div>
+        <h1 className="lobby__title">Buzzr</h1>
+        <div className="lobby__subtitle">
+          {occupied.length} active {occupied.length === 1 ? 'room' : 'rooms'} · tap an open slot to host
         </div>
       </div>
 
-      {/* Kicked banner */}
       {kicked && (
-        <div style={{
-          margin: '16px 16px 0',
-          background: '#3b1a1a',
-          border: `3px solid ${T.redDark}`,
-          borderRadius: 4,
-          padding: '12px 16px',
-          fontSize: 14, fontWeight: 600,
-          color: '#fca5a5',
-          boxShadow: `4px 4px 0 0 ${T.shadow}`,
-        }}>
+        <div className="lobby__kicked-banner">
           You were removed from the room by the host.
         </div>
       )}
 
-      {/* Room list */}
-      <div style={{
-        flex: 1, overflowY: 'auto',
-        padding: '20px 16px 40px',
-        display: 'flex', flexDirection: 'column', gap: 12,
-      }}>
-        {/* Occupied rooms */}
+      <div className="lobby__room-list">
         {occupied.map(room => (
           <RoomCard key={room.id} room={room} onClick={() => navigate(`/room/${room.id}`)} />
         ))}
-
-        {/* Empty slots */}
         {empty.map(room => (
           <EmptySlot key={room.id} onClick={() => navigate(`/room/${room.id}`)} />
         ))}
@@ -148,69 +107,23 @@ export default function Lobby() {
 }
 
 function RoomCard({ room, onClick }: { room: RoomSummary; onClick: () => void }) {
-  const [pressed, setPressed] = useState(false);
-
   return (
-    <button
-      onClick={onClick}
-      onPointerDown={() => setPressed(true)}
-      onPointerUp={() => setPressed(false)}
-      onPointerLeave={() => setPressed(false)}
-      style={{
-        appearance: 'none',
-        border: `3px solid ${T.border}`,
-        background: T.ink,
-        borderRadius: 6,
-        padding: '18px',
-        cursor: 'pointer',
-        textAlign: 'left',
-        color: T.border,
-        boxShadow: pressed ? '0 0 0 0 #0a0502' : '5px 5px 0 0 #0a0502',
-        transform: pressed ? 'translate(5px, 5px)' : 'translate(0,0)',
-        transition: 'transform 60ms, box-shadow 60ms',
-        display: 'flex', alignItems: 'flex-start', gap: 12,
-      }}
-    >
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6,
-        }}>
-          <div style={{
-            width: 8, height: 8, borderRadius: '50%',
-            background: T.green,
-            boxShadow: `0 0 8px ${T.green}`,
-            animation: 'bz-live-dot 1.5s ease-in-out infinite',
-          }} />
-          <div style={{
-            fontFamily: '"JetBrains Mono", monospace',
-            fontSize: 10, letterSpacing: 2, color: T.redDark,
-            textTransform: 'uppercase', fontWeight: 700,
-          }}>LIVE</div>
+    <button onClick={onClick} className="lobby__room-card">
+      <div className="lobby__room-card-body">
+        <div className="lobby__room-card-header-row">
+          <div className="lobby__live-dot" />
+          <div className="lobby__live-label">LIVE</div>
         </div>
-        <div style={{
-          fontSize: 20, fontWeight: 800, letterSpacing: -0.3,
-          lineHeight: 1.1, marginBottom: 8, color: T.border,
-        }}>{room.name}</div>
-        <div style={{
-          display: 'flex', gap: 12, alignItems: 'center',
-          fontSize: 14, color: 'rgba(10,5,2,0.55)',
-        }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+        <div className="lobby__room-card-name">{room.name}</div>
+        <div className="lobby__room-card-meta">
+          <span className="lobby__room-card-count">
             <UsersIcon />
-            <span style={{ fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}>
-              {room.playerCount}
-            </span>
+            <span className="lobby__room-card-count-num">{room.playerCount}</span>
           </span>
         </div>
       </div>
       {room.hasPassword && (
-        <div style={{
-          width: 40, height: 40, borderRadius: 4,
-          background: T.yellow,
-          border: `2px solid ${T.border}`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
-        }}>
+        <div className="lobby__password-badge">
           <LockIcon size={18} color={T.border} />
         </div>
       )}
@@ -219,44 +132,14 @@ function RoomCard({ room, onClick }: { room: RoomSummary; onClick: () => void })
 }
 
 function EmptySlot({ onClick }: { onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        appearance: 'none',
-        border: `3px dashed ${T.yellow}`,
-        background: hovered ? 'rgba(255,210,63,0.07)' : 'transparent',
-        borderRadius: 6,
-        padding: '20px 18px',
-        cursor: 'pointer',
-        display: 'flex', alignItems: 'center', gap: 14,
-        transition: 'background 120ms',
-        color: T.yellow,
-      }}
-    >
-      <div style={{
-        width: 44, height: 44, borderRadius: 4,
-        border: `2px dashed ${T.yellow}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        flexShrink: 0,
-      }}>
+    <button onClick={onClick} className="lobby__empty-slot">
+      <div className="lobby__empty-slot-icon">
         <PlusIcon size={20} color={T.yellow} />
       </div>
-      <div style={{ textAlign: 'left', flex: 1 }}>
-        <div style={{
-          fontFamily: '"JetBrains Mono", monospace',
-          fontSize: 10, letterSpacing: 2, color: T.yellow,
-          textTransform: 'uppercase', fontWeight: 700, marginBottom: 4,
-          opacity: 0.7,
-        }}>OPEN SLOT</div>
-        <div style={{
-          fontSize: 18, fontWeight: 800, letterSpacing: -0.3,
-          color: T.yellow,
-        }}>Start a new room</div>
+      <div className="lobby__empty-slot-text">
+        <div className="lobby__empty-slot-label">OPEN SLOT</div>
+        <div className="lobby__empty-slot-name">Start a new room</div>
       </div>
     </button>
   );

@@ -1,0 +1,41 @@
+.chunky-btn {
+  border: 3px solid var(--bz-border);
+  background: var(--bz-btn-bg, var(--bz-yellow));
+  color: var(--bz-btn-color, var(--bz-border));
+  font-family: 'Space Grotesk', system-ui;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 0 var(--bz-shadow);
+  transform: translate(0, 0);
+  transition: transform 60ms, box-shadow 60ms;
+  min-height: 56px;
+}
+
+.chunky-btn--big {
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  padding: 18px 28px;
+  box-shadow: 6px 6px 0 0 var(--bz-shadow);
+}
+
+.chunky-btn:active:not(:disabled) {
+  box-shadow: 0 0 0 0 var(--bz-shadow);
+  transform: translate(4px, 4px);
+}
+
+.chunky-btn--big:active:not(:disabled) {
+  transform: translate(6px, 6px);
+}
+
+.chunky-btn:disabled {
+  background: #555;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  box-shadow: 0 0 0 0 var(--bz-shadow);
+}
