@@ -3,7 +3,6 @@ import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import JoinRoom from './JoinRoom';
 import GameRoom from './GameRoom';
 import { JoinSession } from '../types';
-import { connectingScreenStyle } from './styles';
 
 const API_BASE = import.meta.env.VITE_SERVER_URL ?? 'http://localhost:3001';
 
@@ -33,7 +32,7 @@ export default function RoomPage() {
   }
 
   if (loading) {
-    return <div style={connectingScreenStyle}>LOADING…</div>;
+    return <div className="connecting-screen">LOADING…</div>;
   }
 
   if (!session) {

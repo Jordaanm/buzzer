@@ -11,55 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-    <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      body {
-        font-family: 'Space Grotesk', system-ui, sans-serif;
-        background: #1a130d;
-        color: #fdf4e3;
-        min-height: 100vh;
-      }
-      input, button, textarea { font-family: inherit; }
 
-      @keyframes bz-pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-      }
-      @keyframes bz-pulse-ring {
-        0%, 100% { box-shadow: 0 0 40px #ff3e3e88, inset 0 -20px 40px rgba(0,0,0,0.4); }
-        50% { box-shadow: 0 0 90px #ff3e3e, inset 0 -20px 40px rgba(0,0,0,0.4); }
-      }
-      @keyframes bz-pop {
-        0% { transform: scale(0.6); opacity: 0; }
-        60% { transform: scale(1.08); }
-        100% { transform: scale(1); opacity: 1; }
-      }
-      @keyframes bz-bob {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
-      }
-      @keyframes bz-flash {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
-      }
-      @keyframes bz-slide-up {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-      }
-      @keyframes bz-shake {
-        0%, 100% { transform: translateX(0); }
-        20%, 60% { transform: translateX(-8px); }
-        40%, 80% { transform: translateX(8px); }
-      }
-      @keyframes bz-slab-pulse {
-        0%, 100% { box-shadow: 10px 10px 0 0 #0a0502; }
-        50% { box-shadow: 10px 10px 0 0 #ff3e3e; }
-      }
-      @keyframes bz-live-dot {
-        0%, 100% { box-shadow: 0 0 4px #5cdb73; }
-        50% { box-shadow: 0 0 12px #5cdb73; }
-      }
-    </style>
   </head>
   <body>
     <div id="root"></div>

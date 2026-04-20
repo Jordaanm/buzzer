@@ -5,7 +5,6 @@ import { isSoundOn, play, setSoundOn } from '../sounds';
 import { JoinSession, RoomState } from '../types';
 import { RoomHostView } from './RoomHostView.tsx';
 import { RoomPlayerView } from './RoomPlayerView.tsx';
-import { connectingScreenStyle } from './styles';
 
 interface Props {
   session: JoinSession;
@@ -77,7 +76,7 @@ export default function GameRoom({ session, onLeave }: Props) {
   }, [roomId, playerName, session, navigate]);
 
   if (!roomState) {
-    return <div style={connectingScreenStyle}>CONNECTING…</div>;
+    return <div className="connecting-screen">CONNECTING…</div>;
   }
 
   const me = roomState.players.find(p => p.id === socket.id);
