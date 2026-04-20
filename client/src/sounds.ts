@@ -39,10 +39,11 @@ const synths: Record<SoundName, () => void> = {
     tone(440, 0.25, 'sine', 0.35, 0);
     tone(587, 0.35, 'sine', 0.35, 0.18);
   },
-  // Sharp low-frequency blat
+  // Bright ascending 3-note chime (G5 → B5 → D6) — Japanese game show style
   buzz: () => {
-    tone(90, 0.08, 'sawtooth', 0.6, 0);
-    tone(70, 0.25, 'sawtooth', 0.45, 0.07);
+    tone(784,  0.15, 'triangle', 0.38, 0);
+    tone(988,  0.18, 'triangle', 0.38, 0.12);
+    tone(1175, 0.3,  'triangle', 0.42, 0.24);
   },
   // 3-note ascending fanfare (C5 → E5 → G5)
   winner: () => {
