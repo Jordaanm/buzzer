@@ -90,10 +90,12 @@ export const RoomHostView = ({
       </div>
 
       {roomState.message && (
-        <div className="room-host-view__message-strip">{roomState.message}</div>
+        <div className="room-host-view__message-strip">
+          {roomState.message}
+          </div>
       )}
 
-      {armed && !hasWinner && (
+      {!armed && !hasWinner && (
         <div className="room-host-view__message-form">
           <input
             value={messageInput}
@@ -104,7 +106,7 @@ export const RoomHostView = ({
             maxLength={200}
           />
           <button onClick={() => onSetMessage(messageInput)} className="room-host-view__message-send-btn">
-            Send
+            {roomState.message ? 'Change' : 'Set'} Question
           </button>
         </div>
       )}

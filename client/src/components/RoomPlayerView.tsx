@@ -38,7 +38,7 @@ export const RoomPlayerView = ({ roomState, me, winnerPlayer, iWon, onLeave, onB
         )}
       </div>
 
-      {roomState.message && (
+      {roomState.message && roomState.state === 'armed' && (
         <div className="room-player-view__message-strip">{roomState.message}</div>
       )}
 
