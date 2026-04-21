@@ -15,6 +15,7 @@ export interface RoomState {
   hasPassword: boolean;
   state: RoundState;
   winnerId: string | null;
+  message: string | null;
   players: Player[];
 }
 

@@ -38,6 +38,10 @@ export const RoomPlayerView = ({ roomState, me, winnerPlayer, iWon, onLeave, onB
         )}
       </div>
 
+      {roomState.message && (
+        <div className="room-player-view__message-strip">{roomState.message}</div>
+      )}
+
       <SlabBuzzer
         armed={roomState.state === 'armed'}
         won={iWon}

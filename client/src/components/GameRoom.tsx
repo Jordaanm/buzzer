@@ -29,6 +29,7 @@ export default function GameRoom({ session, onLeave }: Props) {
   const [nameInput, setNameInput] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const [messageInput, setMessageInput] = useState('');
 
   useEffect(() => {
     const handleConnect = () => {
@@ -49,6 +50,7 @@ export default function GameRoom({ session, onLeave }: Props) {
         if (state.state === 'winner')   play('winner');
         if (state.state === 'disarmed' && prev !== null) play('disarm');
       }
+      if (state.message === null) setMessageInput('');
       prevRoomState.current = state.state;
       setRoomState(state);
     });
@@ -88,6 +90,7 @@ export default function GameRoom({ session, onLeave }: Props) {
   const handleReset = () => socket.emit('reset-round', { roomId });
   const handleArm = () => socket.emit('arm-buzzers', { roomId });
   const handleKick = (id: string) => socket.emit('kick-player', { roomId, targetPlayerId: id });
+  const handleSetMessage = (msg: string) => socket.emit('set-message', { roomId, message: msg || null });
 
   const startEditName = () => {
     setNameInput(roomState.name);
@@ -126,6 +129,9 @@ export default function GameRoom({ session, onLeave }: Props) {
         roomId={roomId}
         soundOn={soundOn}
         onToggleSound={toggleSound}
+        messageInput={messageInput}
+        onMessageInput={setMessageInput}
+        onSetMessage={handleSetMessage}
       />
     );
   }
