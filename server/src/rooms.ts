@@ -15,6 +15,7 @@ export interface RoomState {
   hasPassword: boolean;
   state: RoundState;
   winnerId: string | null;
+  message: string | null;
   players: Player[];
 }
 
@@ -36,6 +37,7 @@ class Room {
   password: string | null = null;
   state: RoundState = "disarmed";
   winnerId: string | null = null;
+  message: string | null = null;
   private players: Map<string, Player> = new Map();
 
   constructor(id: number) {
@@ -73,6 +75,7 @@ class Room {
     this.password = null;
     this.state = "disarmed";
     this.winnerId = null;
+    this.message = null;
     this.players.clear();
   }
 
@@ -84,6 +87,7 @@ class Room {
       hasPassword: this.password !== null,
       state: this.state,
       winnerId: this.winnerId,
+      message: this.message,
       players: Array.from(this.players.values()),
     };
   }

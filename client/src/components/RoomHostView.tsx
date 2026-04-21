@@ -12,7 +12,6 @@ import './RoomHostView.css';
 
 interface HostViewProps {
   roomState: RoomState;
-  roundLabel: string;
   winnerPlayer: RoomState['players'][0] | null;
   editingName: boolean;
   nameInput: string;
@@ -31,12 +30,16 @@ interface HostViewProps {
   roomId: number;
   soundOn: boolean;
   onToggleSound: () => void;
+  messageInput: string;
+  onMessageInput: (v: string) => void;
+  onSetMessage: (msg: string) => void;
 }
 
 export const RoomHostView = ({
-  roomState, roundLabel, winnerPlayer, editingName, nameInput, nameInputRef,
+  roomState, winnerPlayer, editingName, nameInput, nameInputRef,
   showSettings, onLeave, onStartEditName, onCommitName, onNameKey, onNameInput,
   onArm, onReset, onKick, onOpenSettings, onCloseSettings, roomId, soundOn, onToggleSound,
+  messageInput, onMessageInput, onSetMessage,
 }: HostViewProps) => {
   const armed = roomState.state === 'armed';
   const hasWinner = !!winnerPlayer;
@@ -54,7 +57,7 @@ export const RoomHostView = ({
         </button>
         <div className="room-host-view__top-bar-content">
           <div className="room-host-view__host-tag">
-            <CrownIcon size={12} /> HOST · ROUND {roundLabel}
+            <CrownIcon size={12} /> HOST
           </div>
           {editingName ? (
             <input
@@ -85,6 +88,28 @@ export const RoomHostView = ({
         )}
         <div className={`room-host-view__status-text room-host-view__status-text--${statusState}`}>{statusText}</div>
       </div>
+
+      {roomState.message && (
+        <div className="room-host-view__message-strip">
+          {roomState.message}
+          </div>
+      )}
+
+      {!armed && !hasWinner && (
+        <div className="room-host-view__message-form">
+          <input
+            value={messageInput}
+            onChange={e => onMessageInput(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') onSetMessage(messageInput); }}
+            placeholder="Type a question for players…"
+            className="room-host-view__message-input"
+            maxLength={200}
+          />
+          <button onClick={() => onSetMessage(messageInput)} className="room-host-view__message-send-btn">
+            {roomState.message ? 'Change' : 'Set'} Question
+          </button>
+        </div>
+      )}
 
       <div className="room-host-view__content-area">
         {hasWinner ? (

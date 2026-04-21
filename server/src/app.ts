@@ -90,6 +90,20 @@ io.on('connection', (socket) => {
     }
     room.state = 'disarmed';
     room.winnerId = null;
+    room.message = null;
+    io.to(String(id)).emit('room-state', room.getState());
+  });
+
+  socket.on('set-message', ({ roomId, message }: { roomId: string | number; message: string | null }) => {
+    const id = toId(roomId);
+    const room = rooms.getRoom(id);
+    if (!room) return;
+    const player = room.getPlayer(socket.id);
+    if (!player?.isHost) {
+      socket.emit('error', { message: 'Only the host can set a message' });
+      return;
+    }
+    room.message = message ?? null;
     io.to(String(id)).emit('room-state', room.getState());
   });
 

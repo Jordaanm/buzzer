@@ -7,7 +7,6 @@ import './RoomPlayerView.css';
 
 interface PlayerViewProps {
   roomState: RoomState;
-  roundLabel: string;
   me: RoomState['players'][0] | null;
   winnerPlayer: RoomState['players'][0] | null;
   iWon: boolean;
@@ -17,7 +16,7 @@ interface PlayerViewProps {
   onToggleSound: () => void;
 }
 
-export const RoomPlayerView = ({ roomState, roundLabel, me, winnerPlayer, iWon, onLeave, onBuzz, soundOn, onToggleSound }: PlayerViewProps) => {
+export const RoomPlayerView = ({ roomState, me, winnerPlayer, iWon, onLeave, onBuzz, soundOn, onToggleSound }: PlayerViewProps) => {
   return (
     <div className="page-layout">
       <div className="top-bar">
@@ -25,7 +24,7 @@ export const RoomPlayerView = ({ roomState, roundLabel, me, winnerPlayer, iWon, 
           <BackIcon />
         </button>
         <div className="room-player-view__top-bar-content">
-          <div className="room-player-view__player-tag">PLAYER · ROUND {roundLabel}</div>
+          <div className="room-player-view__player-tag">PLAYER</div>
           <div className="room-player-view__room-name">{roomState.name}</div>
         </div>
         <button onClick={onToggleSound} className="icon-btn" title={soundOn ? 'Mute' : 'Unmute'}>
@@ -38,6 +37,10 @@ export const RoomPlayerView = ({ roomState, roundLabel, me, winnerPlayer, iWon, 
           </div>
         )}
       </div>
+
+      {roomState.message && roomState.state === 'armed' && (
+        <div className="room-player-view__message-strip">{roomState.message}</div>
+      )}
 
       <SlabBuzzer
         armed={roomState.state === 'armed'}

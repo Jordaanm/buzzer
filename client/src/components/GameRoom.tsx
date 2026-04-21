@@ -14,7 +14,6 @@ interface Props {
 export default function GameRoom({ session, onLeave }: Props) {
   const { roomId, playerName } = session;
   const [roomState, setRoomState] = useState<RoomState | null>(null);
-  const [round, setRound] = useState(1);
   const prevRoomState = useRef<string | null>(null);
   const navigate = useNavigate();
   const [soundOn, setSoundOnState] = useState(isSoundOn);
@@ -30,6 +29,7 @@ export default function GameRoom({ session, onLeave }: Props) {
   const [nameInput, setNameInput] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
+  const [messageInput, setMessageInput] = useState('');
 
   useEffect(() => {
     const handleConnect = () => {
@@ -45,12 +45,12 @@ export default function GameRoom({ session, onLeave }: Props) {
     socket.on('connect', handleConnect);
     socket.on('room-state', (state: RoomState) => {
       const prev = prevRoomState.current;
-      if (prev === 'winner' && state.state === 'disarmed') setRound(r => r + 1);
       if (prev !== state.state) {
         if (state.state === 'armed')    play('arm');
         if (state.state === 'winner')   play('winner');
         if (state.state === 'disarmed' && prev !== null) play('disarm');
       }
+      if (state.message === null) setMessageInput('');
       prevRoomState.current = state.state;
       setRoomState(state);
     });
@@ -90,6 +90,7 @@ export default function GameRoom({ session, onLeave }: Props) {
   const handleReset = () => socket.emit('reset-round', { roomId });
   const handleArm = () => socket.emit('arm-buzzers', { roomId });
   const handleKick = (id: string) => socket.emit('kick-player', { roomId, targetPlayerId: id });
+  const handleSetMessage = (msg: string) => socket.emit('set-message', { roomId, message: msg || null });
 
   const startEditName = () => {
     setNameInput(roomState.name);
@@ -106,13 +107,10 @@ export default function GameRoom({ session, onLeave }: Props) {
     if (e.key === 'Escape') setEditingName(false);
   };
 
-  const roundLabel = String(round).padStart(2, '0');
-
   if (isHost) {
     return (
       <RoomHostView
         roomState={roomState}
-        roundLabel={roundLabel}
         winnerPlayer={winnerPlayer ?? null}
         editingName={editingName}
         nameInput={nameInput}
@@ -131,6 +129,9 @@ export default function GameRoom({ session, onLeave }: Props) {
         roomId={roomId}
         soundOn={soundOn}
         onToggleSound={toggleSound}
+        messageInput={messageInput}
+        onMessageInput={setMessageInput}
+        onSetMessage={handleSetMessage}
       />
     );
   }
@@ -138,7 +139,6 @@ export default function GameRoom({ session, onLeave }: Props) {
   return (
     <RoomPlayerView
       roomState={roomState}
-      roundLabel={roundLabel}
       me={me ?? null}
       winnerPlayer={winnerPlayer ?? null}
       iWon={iWon}

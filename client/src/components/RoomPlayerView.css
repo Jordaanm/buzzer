@@ -44,6 +44,16 @@
   color: var(--bz-ink);
 }
 
+.room-player-view__message-strip {
+  padding: 12px 20px;
+  background: var(--bz-yellow);
+  border-bottom: 3px solid var(--bz-border);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bz-border);
+  text-align: center;
+}
+
 .room-player-view__winner-bar {
   padding: 14px 20px 28px;
   border-top: 3px solid var(--bz-border);

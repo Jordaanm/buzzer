@@ -192,6 +192,55 @@
   text-transform: uppercase;
 }
 
+.room-host-view__message-strip {
+  padding: 10px 16px;
+  background: var(--bz-yellow);
+  border-bottom: 3px solid var(--bz-border);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bz-border);
+}
+
+.room-host-view__message-form {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bz-bg2);
+  border-bottom: 3px solid var(--bz-border);
+}
+
+.room-host-view__message-input {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid var(--bz-border);
+  border-radius: 4px;
+  color: var(--bz-ink);
+  padding: 6px 10px;
+  outline: none;
+  min-width: 0;
+}
+
+.room-host-view__message-input:focus {
+  border-color: var(--bz-yellow);
+}
+
+.room-host-view__message-send-btn {
+  padding: 6px 14px;
+  background: var(--bz-yellow);
+  color: var(--bz-border);
+  border: 2px solid var(--bz-border);
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 2px 2px 0 0 var(--bz-shadow);
+}
+
 .room-host-view__action-footer {
   padding: 14px 16px 28px;
   background: var(--bz-bg2);
