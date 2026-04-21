@@ -12,7 +12,6 @@ import './RoomHostView.css';
 
 interface HostViewProps {
   roomState: RoomState;
-  roundLabel: string;
   winnerPlayer: RoomState['players'][0] | null;
   editingName: boolean;
   nameInput: string;
@@ -34,7 +33,7 @@ interface HostViewProps {
 }
 
 export const RoomHostView = ({
-  roomState, roundLabel, winnerPlayer, editingName, nameInput, nameInputRef,
+  roomState, winnerPlayer, editingName, nameInput, nameInputRef,
   showSettings, onLeave, onStartEditName, onCommitName, onNameKey, onNameInput,
   onArm, onReset, onKick, onOpenSettings, onCloseSettings, roomId, soundOn, onToggleSound,
 }: HostViewProps) => {
@@ -54,7 +53,7 @@ export const RoomHostView = ({
         </button>
         <div className="room-host-view__top-bar-content">
           <div className="room-host-view__host-tag">
-            <CrownIcon size={12} /> HOST · ROUND {roundLabel}
+            <CrownIcon size={12} /> HOST
           </div>
           {editingName ? (
             <input

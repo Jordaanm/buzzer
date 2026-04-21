@@ -14,7 +14,6 @@ interface Props {
 export default function GameRoom({ session, onLeave }: Props) {
   const { roomId, playerName } = session;
   const [roomState, setRoomState] = useState<RoomState | null>(null);
-  const [round, setRound] = useState(1);
   const prevRoomState = useRef<string | null>(null);
   const navigate = useNavigate();
   const [soundOn, setSoundOnState] = useState(isSoundOn);
@@ -45,7 +44,6 @@ export default function GameRoom({ session, onLeave }: Props) {
     socket.on('connect', handleConnect);
     socket.on('room-state', (state: RoomState) => {
       const prev = prevRoomState.current;
-      if (prev === 'winner' && state.state === 'disarmed') setRound(r => r + 1);
       if (prev !== state.state) {
         if (state.state === 'armed')    play('arm');
         if (state.state === 'winner')   play('winner');
@@ -106,13 +104,10 @@ export default function GameRoom({ session, onLeave }: Props) {
     if (e.key === 'Escape') setEditingName(false);
   };
 
-  const roundLabel = String(round).padStart(2, '0');
-
   if (isHost) {
     return (
       <RoomHostView
         roomState={roomState}
-        roundLabel={roundLabel}
         winnerPlayer={winnerPlayer ?? null}
         editingName={editingName}
         nameInput={nameInput}
@@ -138,7 +133,6 @@ export default function GameRoom({ session, onLeave }: Props) {
   return (
     <RoomPlayerView
       roomState={roomState}
-      roundLabel={roundLabel}
       me={me ?? null}
       winnerPlayer={winnerPlayer ?? null}
       iWon={iWon}
